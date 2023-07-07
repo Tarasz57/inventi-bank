@@ -1,4 +1,9 @@
 package com.inventi.bank.repository;
 
-public interface StatementRepo {
+import com.inventi.bank.entity.StatementEntity;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface StatementRepo extends CrudRepository<StatementEntity, Long> {
 }

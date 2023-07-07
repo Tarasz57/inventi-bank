@@ -1,34 +1,56 @@
 package com.inventi.bank.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.inventi.bank.entity.StatementEntity;
 import com.inventi.bank.model.Statement;
+import com.inventi.bank.repository.StatementRepo;
 import com.inventi.bank.util.CsvUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountStatementService {
 
+  private final StatementRepo statementRepo;
+
+  @Autowired
+  public AccountStatementService(StatementRepo statementRepo) {
+    this.statementRepo = statementRepo;
+  }
+
   public List<List<Statement>> parseAndSaveStatements(MultipartFile[] files) {
-    List<List<Statement>> statements = Collections.emptyList();
-    for(var file : files){
+    List<List<Statement>> statements = new ArrayList<>();
+    for (var file : files) {
       List<Statement> parsedStatement = CsvUtil.parseCsvToModel(file, Statement.class);
       statements.add(parsedStatement);
-      //TODO add save to repo here
+      List<StatementEntity> statementEntity = mapToStatementEntity(parsedStatement);
+      statementRepo.saveAll(statementEntity);
     }
     return statements;
   }
 
-  public Object mapToStatementEntity(Object object){
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    StatementEntity statementEntity = mapper.convertValue(object, StatementEntity.class);
-    return statementEntity;
+  private List<StatementEntity> mapToStatementEntity(List<Statement> statements) {
+    List<StatementEntity> statementEntities = statements.stream()
+        .map(statement ->
+            new StatementEntity(
+                statement.getAccountNumber(),
+                statement.getTimeOfOperation(),
+                statement.getBeneficiary(),
+                statement.getComment(),
+                statement.getAmount(),
+                statement.getCurrency()
+            )
+        )
+        .collect(Collectors.toList());
+    return statementEntities;
   }
 
 }

@@ -28,7 +28,7 @@ public class CsvUtil {
       // convert `CsvToBean` object to list of models
       models = csvToBean.parse();
     } catch (Exception ex) {
-      logger.error("Failed to parse csv {}", ex);
+      logger.error("Failed to parse csv");
       throw new IllegalArgumentException(ex.getCause().getMessage());
     }
 
