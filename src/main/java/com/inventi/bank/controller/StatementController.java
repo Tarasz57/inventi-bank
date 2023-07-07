@@ -21,9 +21,8 @@ public class StatementController {
   }
 
   @PostMapping("/import")
-  public ResponseEntity importStatement(@RequestParam("files") MultipartFile[] files){
-    accountStatementService.parseAndSaveStatements(files);
-    return ResponseEntity.ok().build();
+  public ResponseEntity importStatement(@RequestParam("files") MultipartFile[] files) {
+    return ResponseEntity.ok(accountStatementService.parseAndSaveStatements(files));
   }
 
 }

@@ -33,7 +33,12 @@ public class StatementEntity {
   @UpdateTimestamp
   private LocalDateTime updated;
 
-  public StatementEntity(String accountNumber, LocalDateTime timeOfOperation, String beneficiary, String comment, double amount, String currency) {
+  public StatementEntity(String accountNumber,
+                         LocalDateTime timeOfOperation,
+                         String beneficiary,
+                         String comment,
+                         double amount,
+                         String currency) {
     this.accountNumber = accountNumber;
     this.timeOfOperation = timeOfOperation;
     this.beneficiary = beneficiary;
