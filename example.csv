@@ -1,0 +1,8 @@
+accountNumber,timeOfOperation,beneficiary,comment,amount,currency
+123,2022-09-21T02:15:14.521Z,63,komentaras,45.78,EUR
+123,2022-09-21T02:15:24.521Z,63,komentaras,45.78,EUR
+123,2022-09-21T02:15:34.521Z,63,komentaras,45.78,EUR
+123,2022-09-21T02:15:44.521Z,63,komentaras,45.78,EUR
+123,2021-09-21T02:15:54.521Z,63,komentaras,45.78,EUR
+123,2021-09-21T02:15:24.521Z,63,komentaras,45.78,EUR
+123,2023-09-21T02:15:34.521Z,63,komentaras,45.78,EUR
