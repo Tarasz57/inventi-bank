@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "statement")
 @NoArgsConstructor
+@Getter
 public class StatementEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.TABLE)
@@ -24,7 +26,7 @@ public class StatementEntity {
   private LocalDateTime timeOfOperation;
   private String beneficiary;
   private String comment;
-  private double amount;
+  private Double amount;
   private String currency;
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   @CreationTimestamp

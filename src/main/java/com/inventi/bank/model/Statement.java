@@ -3,18 +3,18 @@ package com.inventi.bank.model;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class Statement {
   @CsvBindByName(required = true)
   private String accountNumber;
   @CsvBindByName(required = true)
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   @CsvDate(value = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
   private LocalDateTime timeOfOperation;
   @CsvBindByName(required = true)
@@ -22,7 +22,21 @@ public class Statement {
   @CsvBindByName
   private String comment;
   @CsvBindByName(required = true)
-  private double amount;
+  private Double amount;
   @CsvBindByName(required = true)
   private String currency;
+
+  public Statement(String accountNumber,
+      LocalDateTime timeOfOperation,
+      String beneficiary,
+      String comment,
+      Double amount,
+      String currency) {
+    this.accountNumber = accountNumber;
+    this.timeOfOperation = timeOfOperation;
+    this.beneficiary = beneficiary;
+    this.comment = comment;
+    this.amount = amount;
+    this.currency = currency;
+  }
 }
