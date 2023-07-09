@@ -38,36 +38,60 @@ public class AccountStatementService {
   }
 
   public List<Statement> findStatements(String account, Date dateFrom, Date dateTo) {
-      List<StatementEntity> savedStatements;
-      LocalDateTime from = dateFrom != null ? dateFrom.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime() : null;
-      LocalDateTime to = dateTo != null ? dateTo.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime() : null;
-      if(from != null && to != null){
-        savedStatements = statementRepo.
-            findAllByAccountNumberAndTimeOfOperationBetweenOrderByTimeOfOperationDesc(
-                account,
-                from,
-                to);
-      }
-      else if(to != null){
-        savedStatements = statementRepo.findAllByAccountNumberAndTimeOfOperationBeforeOrderByTimeOfOperationDesc(
-            account,
-            to
-        );
-      } else if (from != null){
-        savedStatements = statementRepo.findAllByAccountNumberAndTimeOfOperationAfterOrderByTimeOfOperationDesc(
-            account,
-            from
-        );
-      } else {
-        savedStatements = statementRepo.findAllByAccountNumberOrderByTimeOfOperationDesc(account);
-      }
+    List<StatementEntity> savedStatements;
+    LocalDateTime from = dateFrom != null ? dateFrom.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime() : null;
+    LocalDateTime to = dateTo != null ? dateTo.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime() : null;
+    if(from != null && to != null){
+      savedStatements = statementRepo.
+          findAllByAccountNumberAndTimeOfOperationBetweenOrderByTimeOfOperationDesc(
+              account,
+              from,
+              to);
+    }
+    else if(to != null){
+      savedStatements = statementRepo.findAllByAccountNumberAndTimeOfOperationBeforeOrderByTimeOfOperationDesc(
+          account,
+          to
+      );
+    } else if (from != null){
+      savedStatements = statementRepo.findAllByAccountNumberAndTimeOfOperationAfterOrderByTimeOfOperationDesc(
+          account,
+          from
+      );
+    } else {
+      savedStatements = statementRepo.findAllByAccountNumberOrderByTimeOfOperationDesc(account);
+    }
 
-      List<Statement> statements = mapToStatement(savedStatements);
+    List<Statement> statements = mapToStatement(savedStatements);
     return statements;
   }
 
   public AccountBalance calculateBalance(String account, Date dateFrom, Date dateTo) {
-    return new AccountBalance(statementRepo.calculateBalance(account));
+    Double balance;
+    LocalDateTime from = dateFrom != null ? dateFrom.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime() : null;
+    LocalDateTime to = dateTo != null ? dateTo.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime() : null;
+    if(from != null && to != null){
+      balance = statementRepo.
+          calculateBalanceBetweenDates(
+              account,
+              from,
+              to);
+    }
+    else if(to != null){
+      balance = statementRepo.calculateBalanceBeforeDate(
+          account,
+          to
+      );
+    } else if (from != null){
+      balance = statementRepo.calculateBalanceAfterDate(
+          account,
+          from
+      );
+    } else {
+      balance = statementRepo.calculateBalance(account);
+    }
+    balance = balance == null ? 0 : balance;
+    return new AccountBalance(balance);
   }
 
   private List<StatementEntity> mapToStatementEntity(List<Statement> statements) {

@@ -16,4 +16,10 @@ public interface StatementRepo extends CrudRepository<StatementEntity, Long> {
 
   @Query(value = "SELECT SUM(amount) FROM statement where account_number = ?1", nativeQuery = true)
   Double calculateBalance(String acc);
+  @Query(value = "SELECT SUM(amount) FROM statement where account_number = ?1 and time_of_operation > ?2", nativeQuery = true)
+  Double calculateBalanceAfterDate(String acc, LocalDateTime from);
+  @Query(value = "SELECT SUM(amount) FROM statement where account_number = ?1 and time_of_operation < ?2", nativeQuery = true)
+  Double calculateBalanceBeforeDate(String acc, LocalDateTime to);
+  @Query(value = "SELECT SUM(amount) FROM statement where account_number = ?1 and time_of_operation > ?2 and time_of_operation < ?3", nativeQuery = true)
+  Double calculateBalanceBetweenDates(String acc, LocalDateTime from, LocalDateTime to);
 }
